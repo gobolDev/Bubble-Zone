@@ -1,0 +1,56 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+/// <summary>
+/// Handles Saves/Loads of SettingsData. This script is not grounded.
+/// </summary>
+public class SettingsCtrl : MonoBehaviour
+{
+    public static SettingsCtrl instance = null;
+    public SettingsData data;                       // For accessing the game data
+
+    string dataFilePath;                        // Path were data file will be stored
+    BinaryFormatter binaryFormatter;            // Helps save/load data in binary files
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+
+        binaryFormatter = new BinaryFormatter();
+        dataFilePath = Application.persistentDataPath + "/volume.te";
+        Debug.Log(dataFilePath);
+    }
+
+    public void SaveData()
+    {
+        FileStream fileStream = new FileStream(dataFilePath, FileMode.Create);
+        binaryFormatter.Serialize(fileStream, data);
+        fileStream.Close();
+    }
+
+    public void LoadData()
+    {
+        if (File.Exists(dataFilePath))
+        {
+            FileStream fileStream = new FileStream(dataFilePath, FileMode.Open);
+            data = (SettingsData)binaryFormatter.Deserialize(fileStream);
+            fileStream.Close();
+        }
+    }
+
+    public void OnEnable()
+    {
+        LoadData();
+    }
+
+    public void OnDisable()
+    {
+        SaveData();
+    }
+}
+
