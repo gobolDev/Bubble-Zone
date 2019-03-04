@@ -1,2 +1,2 @@
 # Bubble-Zone
-Arcade, Side-Scrolling 2D game
+Arcade, Side-Scrolling 2D game.
